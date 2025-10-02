@@ -1,0 +1,1 @@
+echo "$(cat readme-intro.md)\n$(gomarkdoc)" > README.md
