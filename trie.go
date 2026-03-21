@@ -249,11 +249,12 @@ func (trie *trie[K, V]) LessThan(key []K, inclusive bool) iter.Seq2[[]K, V] {
 		resultKey := make([]K, 0, keyBufferSize)
 		next := trie.forward(trie.root, 0, trie.root)
 		for current, depth := next(); current != nil; current, depth = next() {
-			if current == stop {
-				return
-			}
 			resultKey = resultKey[:depth+1]
 			resultKey[depth] = current.parentEdge
+			if current == stop {
+				yield(slices.Clone(resultKey), current.value)
+				return
+			}
 			if current.isKey() && !yield(slices.Clone(resultKey), current.value) {
 				return
 			}
